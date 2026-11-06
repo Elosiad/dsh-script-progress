@@ -1,6 +1,6 @@
 {
   "name": "dsh-script-progress",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "description": "长任务脚本必须自带进度条（百分比 / 速度 / ETA），并在 10/25/50/75/90% 里程碑向用户回报。",
   "license": "MIT",
   "author": "Elosia-W",

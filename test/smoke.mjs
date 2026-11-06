@@ -79,6 +79,11 @@ check('英文段落生效', en.includes('Script progress') && !en.includes('脚�
 const quiet = buildSection(resolveConfig({ reportInChat: false }), helpers)
 check('关闭回报时不写逐条回报', !quiet.includes('一条里程碑一行'))
 
+const withCli = buildSection(resolveConfig({}), { ...helpers, cliPath: 'C:\\fake\\dsh-progress.mjs' })
+check('装了 task-progress 时给出包装器用法', withCli.includes('DSH_PROGRESS_CLI'))
+check('明确禁止为上报另写脚本', withCli.includes('不要另写上报脚本'))
+check('没装时不提包装器', !zh.includes('DSH_PROGRESS_CLI'))
+
 // ── 3. 插件挂载 ─────────────────────────────────────────────────────────
 const plugin = await import(pathToFileURL(join(pkgDir, 'index.js')).href)
 check('插件名', plugin.name === 'script-progress')

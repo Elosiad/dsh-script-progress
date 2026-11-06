@@ -137,6 +137,16 @@ There is exactly one connection point: the helper detects `DSH_PROGRESS_DIR` and
 same progress to it, so once that plugin is installed there is nothing for you to do — the
 UI lights up on its own.
 
+**Two ways to report**, depending on whether the script can be changed:
+
+| Case | How | Who writes progress |
+|---|---|---|
+| The script can be changed | Use this plugin's helper | The helper writes both stdout and JSONL |
+| An external command cannot (robocopy / ffmpeg / curl / rsync) | `node "$env:DSH_PROGRESS_CLI" run --task <id> -- <command>` | The wrapper reads `12%` / `12/88` from the output and writes the ending from the exit code |
+
+**Never write a companion reporting script** (`emit-progress.py` and friends): wrapping is one
+command, a companion script is the same wheel re-invented per task.
+
 **They do not replace each other**: this plugin draws no UI, and that one does not make any
 script report progress — with a silent script it can only show an elapsed time.
 

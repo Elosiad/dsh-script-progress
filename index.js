@@ -15,6 +15,8 @@
  * 只用两个公开扩展点：`systemPrompt.section()` 与文件系统。零依赖。
  */
 
+import { existsSync, readdirSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
@@ -32,6 +34,49 @@ export const inject = ['systemPrompt']
 export const SECTION_NAME = 'progress:script'
 
 const PACKAGE_DIR = dirname(fileURLToPath(import.meta.url))
+
+/**
+ * 找到 dsh-task-progress 附带的 `dsh-progress` 包装器。
+ *
+ * 它是「改不了的命令」唯一正确的上报方式：一行包住，跟随输出、认百分比、
+ * 按退出码写结局。找不到就返回 null，提示段落退回到「只用助手」的说法。
+ */
+function detectProgressCli() {
+  // 1) 环境变量：shell 调用里由宿主注入，宿主进程自身通常没有。
+  const fromEnv = process.env.DSH_PROGRESS_CLI
+  if (typeof fromEnv === 'string' && fromEnv.trim() !== '' && existsSync(fromEnv.trim())) {
+    return fromEnv.trim()
+  }
+
+  // 2) 当前 profile（DSH_PROFILE_DIR 同样只在 shell 调用里才有，这里兜个底）。
+  const profileDir = process.env.DSH_PROFILE_DIR
+  if (typeof profileDir === 'string' && profileDir.trim() !== '') {
+    const candidate = join(profileDir.trim(), 'node_modules', 'dsh-task-progress', 'bin', 'dsh-progress.mjs')
+    if (existsSync(candidate)) return candidate
+  }
+
+  // 3) 直接扫 $DSH_HOME/profiles/*/node_modules —— 宿主进程里唯一可靠的路径。
+  const home = process.env.DSH_HOME && process.env.DSH_HOME.trim() !== ''
+    ? process.env.DSH_HOME.trim()
+    : join(homedir(), '.dsh')
+  const preferred = process.env.DSH_PROFILE && process.env.DSH_PROFILE.trim() !== ''
+    ? process.env.DSH_PROFILE.trim()
+    : ''
+  try {
+    const profiles = readdirSync(join(home, 'profiles'), { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+    profiles.sort((a, b) => (a === preferred ? -1 : b === preferred ? 1 : a.localeCompare(b)))
+    for (const name of profiles) {
+      const candidate = join(home, 'profiles', name, 'node_modules', 'dsh-task-progress', 'bin', 'dsh-progress.mjs')
+      if (existsSync(candidate)) return candidate
+    }
+  } catch {
+    // 没有 profiles 目录就当作没装。
+  }
+
+  return null
+}
 
 /**
  * @param ctx - Cordis context，带 systemPrompt 服务。
@@ -60,6 +105,7 @@ export function apply(ctx, config) {
     helperDir,
     psHelperPath: join(helperDir, 'progress.ps1'),
     mjsUrl: pathToFileURL(join(helperDir, 'progress.mjs')).href,
+    cliPath: detectProgressCli(),
   }
 
   ctx.effect(
@@ -90,6 +136,7 @@ export function apply(ctx, config) {
     enabled: mounted.enabled,
     helperDir,
     sectionChars,
+    progressCli: helpers.cliPath,
     milestones: mounted.milestones,
     language: mounted.language,
     minSeconds: mounted.minSeconds,
