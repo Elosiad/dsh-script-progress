@@ -1,0 +1,3 @@
+# 运行 Python 助手时产生的字节码
+__pycache__/
+*.pyc

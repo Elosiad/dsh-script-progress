@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Script Progress",
+    "description": "Makes long-running scripts carry a progress bar (percent / rate / ETA) and post milestone updates at 10/25/50/75/90%."
+  }
+}

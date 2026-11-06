@@ -1,0 +1,13 @@
+# dsh-script-progress bundle patch: 把插件挂进 profile。
+#
+# 这一行就是「插件」页里看到的那一条。下面的 config 是该行的初始值，
+# 字段含义见 README.md；改完重启或重新加载插件后生效。
+- insert:
+    - id: script-progress
+      name: 'dsh-script-progress'
+      config:
+        enabled: true
+        minSeconds: 20
+        milestones: [10, 25, 50, 75, 90]
+        reportInChat: true
+        language: zh

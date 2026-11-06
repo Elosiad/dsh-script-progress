@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Script progress">
+  <rect width="64" height="64" rx="14" fill="#111827"/>
+  <rect x="10" y="30" width="44" height="9" rx="4.5" fill="#334155"/>
+  <rect x="10" y="30" width="27" height="9" rx="4.5" fill="#22d3ee"/>
+  <circle cx="37" cy="34.5" r="8" fill="#22d3ee" opacity="0.18"/>
+  <circle cx="37" cy="34.5" r="4" fill="#22d3ee"/>
+  <g stroke="#94a3b8" stroke-width="2.6" stroke-linecap="round">
+    <path d="M12 15h12"/>
+    <path d="M12 21h7"/>
+    <path d="M50 15h2"/>
+  </g>
+  <path d="M43 50h11" stroke="#475569" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M10 50h11" stroke="#475569" stroke-width="2.6" stroke-linecap="round"/>
+</svg>

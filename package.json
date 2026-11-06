@@ -1,0 +1,55 @@
+{
+  "name": "dsh-script-progress",
+  "version": "1.1.0",
+  "description": "长任务脚本必须自带进度条（百分比 / 速度 / ETA），并在 10/25/50/75/90% 里程碑向用户回报。",
+  "license": "MIT",
+  "author": "Elosia-W",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elosiad/dsh-script-progress.git"
+  },
+  "homepage": "https://github.com/Elosiad/dsh-script-progress#readme",
+  "bugs": {
+    "url": "https://github.com/Elosiad/dsh-script-progress/issues"
+  },
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "index.js",
+    "lib",
+    "assets",
+    "examples",
+    "test",
+    "cordis.patch.yml",
+    "locale",
+    "icon.svg",
+    "README.md",
+    "README.en.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "runtime": "host",
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "meta": {
+    "title": "脚本进度条",
+    "description": "写长任务脚本时强制带进度条（进度 / 速度 / ETA），并在 10/25/50/75/90% 里程碑回报到聊天。"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "progress-bar",
+    "long-running",
+    "scripts"
+  ]
+}
