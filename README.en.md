@@ -121,16 +121,24 @@ On a real terminal it is an in-place `\r` bar instead.
 A `break`, `return` or exception ends the row as `stopped at 21/100 it` — it **never
 claims 100%**, because a model that does so announces a finished job that never finished.
 
-## Relationship to dsh-task-progress
+## Division of labour: one makes it exist, one makes it visible
 
-When [dsh-task-progress](https://github.com/chen8923/dsh-task-progress) is installed, the
-helper notices `DSH_PROGRESS_DIR` and writes the same progress as JSON lines into it:
+In one sentence: **this plugin makes progress *exist*;
+[dsh-task-progress](https://github.com/chen8923/dsh-task-progress) makes it *visible*.**
 
-- **UI**: the floating panel and the right-sidebar tab draw the bar live;
-- **Chat**: the model reports each `@@PROGRESS` milestone.
+| | This plugin | dsh-task-progress |
+|---|---|---|
+| Role | Producer | Display |
+| Owns | How the script reports, how the model reports | Where the progress is drawn |
+| Output | `@@PROGRESS` lines (for the model) + JSONL lines (for the UI) | Floating panel + the "Task progress" sidebar tab |
+| Without it | The script still runs, but you know nothing about it | One line of text in chat; the UI spins forever |
 
-They do not replace each other, and there is nothing to configure — install that plugin
-and this capability attaches itself.
+There is exactly one connection point: the helper detects `DSH_PROGRESS_DIR` and feeds the
+same progress to it, so once that plugin is installed there is nothing for you to do — the
+UI lights up on its own.
+
+**They do not replace each other**: this plugin draws no UI, and that one does not make any
+script report progress — with a silent script it can only show an elapsed time.
 
 ## Design notes
 
